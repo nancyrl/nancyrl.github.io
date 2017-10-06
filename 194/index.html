@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>CS 194-26 Project 3</title>
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <style>
+      .card {
+        border: none;
+      }
+      .container {
+        padding-left: 80px;
+        padding-right: 80px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1><br>Fun with Frequencies & Gradients</h1>
+      <h4>Nancy Li</h4>
+      <br>
+      <br>
+      <!-- Summarize the project -->
+      <h4> Overview </h4>
+        <p>This project explores frequency domain and gradient domain image processing tools to blend together some fun images!
+        </p>
+      <br>
+
+      <h4>Warmup</h4>
+        <p> To sharpen an image, the high frequency components of an image is extracted and added back to the original: original + c*high frequency. High frequencies are found by subtracting the low frequencies (found with the Gaussian filter).
+        </p>
+      <br>
+      <!-- WARMUP IMAGES -->
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="tay.jpg" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">Taylor Swift from her Fearless era.<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="tay_sharp.jpg" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">Taylor, sharpened.</p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="tay_supersharp.jpg" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">Highly sharpened Taylor.<br></p>
+          </div>
+        </div>
+      </div>
+      <br>
+
+      <h4>Hybrid Images </h4>
+        <p>Hybrid images are strange images that seem to change as a viewer gets farther and farther away in distance. High frequency will dominate perception when a viewer is close, but at a distance, the low frequency part of the signal dominates. We can create a hybrid image by blending the high frequency portion of one image with the low frequency portion of another. To achieve the best results, pairs of images are aligned before averaging is done.
+        </p>
+      <br>
+      <!-- Obama -->
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="obamalow.jpg" height="220px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">A stern former President Obama.<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="obamahigh.jpg" height="220px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">A happy Obama.<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="obama_out_sm.png" height="220px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">Smiling up close, frowning from afar<br></p>
+          </div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="fftal.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of high-freq<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="fftahi.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of low-freq<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="fftlo.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of low pass<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="ffthi.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of high pass<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="ffthy.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of hybrid<br></p>
+          </div>
+        </div>
+      </div>
+      <!--  PETER & ASLAN -->
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="boylow.jpg" height="320px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">Peter from Narnia<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="boyhigh.jpg" height="320px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">Aslan<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="boy_hybrid_small.png" height="320px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">Success!<br></p>
+          </div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="fftal2.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of high-freq<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="fftahi2.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of low-freq<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="fftlo2.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of low pass<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="ffthi2.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of high pass<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="ffthy2.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of hybrid<br></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- GANDALF -->
+
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="failurelow.jpg" height="220px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">Gandalf from Lord of the Rings<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="failurehigh.jpg" height="220px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">An eagle!<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="failure_out_sm.png" height="220px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">Blending failure b/c of bad alignment<br></p>
+          </div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="fftal3.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of high-freq<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="fftahi3.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of low-freq<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="fftlo3.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of low pass<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="ffthi3.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of high pass<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="ffthy3.png" height="120px" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">FFT of hybrid<br></p>
+          </div>
+        </div>
+      </div>
+
+<!--  -->
+      <br>
+      <h4>Gaussian and Laplacian Stacks</h4>
+        <p>Gaussian stacks are made by repeatedly applying a gaussian filter over the source image. The Laplacian stack is built in the same way using the Gaussian filter. These stacks are applied to interesting images such as Davinci's Mona Lisa and Salvador Dali's Lincoln and Gala that contain multiple resolutions. We see Lincoln/Gala and Mona Lisa's smile/frown emerge in different stacks!
+        </p>
+      <br>
+
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="abe.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="abe_g1.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="abe_g2.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="abe_g3.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="abe_g4.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="abe_g5.jpg" alt="Card image cap">
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="abe.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="abe_l2.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="abe_l2.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="abe_l3.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="abe_l4.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="abe_l5.jpg" alt="Card image cap">
+        </div>
+      </div>
+
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="monalisa.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="monalisa_g1.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="monalisa_g2.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="monalisa_g3.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="monalisa_g4.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="monalisa_g5.jpg" alt="Card image cap">
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="monalisa.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="monalisa_l2.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="monalisa_l2.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="monalisa_l3.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="monalisa_l4.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="monalisa_l5.jpg" alt="Card image cap">
+        </div>
+      </div>
+      <!--  -->
+      <br><br>
+      <h4>Multiresolution Blending</h4>
+        <p>Multiresolution blending computes a seam between the two images at each band of image frequencies, resulting in a much smoother seam. A mask is used to select the area of one image to blend with the other.
+        <br><br>In this section, we use the Laplacian and Gaussian stacks from the previous section. For both images A and B, Laplacian and Gaussian stacks are necessary. The mask needs a Gaussian stack as well.
+        <br><br>First, A and B's Laplacian stacks are added together. Then, using a single combined Gaussian image of both A and B, we can rebuild the original combined image, successively adding the nth Gaussian blend with the n-1st Laplacian blend. Below are the results.
+        </p>
+      <br>
+
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="orange.jpg" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">Original orange image<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="apple.jpg" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">Apple<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="orangeappleN.jpg" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">Naive cut and paste (see below section)<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="orapple.jpg" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">Multiresolution blending<br></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" height='320px' src="hplowhphigh.jpg" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">A blend of Harry Potter and his nemesis<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top"  height='320px' src="failurefailure2.jpg" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">A failed blend, due to bad alignment<br></p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="birdhorse.jpg" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">A horse with an eagle head? (A hippogriff)<br></p>
+          </div>
+        </div>
+      </div>
+      <!--  -->
+      <br>
+      <h4>Project Part 2</h4>
+
+      This project explores gradient-domain processing, aiming to blend an object from a source image into a target image. The simplest method to do that would be to copy and paste pixels from one image onto the other, but this creates very noticeable differences around the seams, no matter how well the backgrounds match. How can we get rid of the seams without changing up the source region copied into the new image?
+      <br><br>Because people often notice the gradient of an image more so than the overall intensity, we set up this problem as finding values for the target pixels that maximally preserve the gradient of the source region.
+      <br>
+      <br>
+      <h4>Toy Problem</h4>
+        <p>Gradients work like 2D derivatives, and in this section we solve for best fitting values to pixel gradients to recreate a tiny Toy Story image. The left image is the original, and the right image is the copy.
+        <br><br>
+        <img src="toy_problem.png" alt="Card image cap" align="center">
+        <img src="toy_out.jpg" alt="Card image cap" align="center">
+        <br><br>
+        The result requires solving a system of matrix equations, Ax = b. The first matrix A is a sparse height*width by height*width matrix, ensuring each pixel index has its own variable. The second matrix b is a column vector of length height*width. Solving for x will give us the pixel values we want for the best blend.
+        The matrices are filled by iterating through the entire image; if the mask is 0 at a pixel, matrix A gets a 1 at that pixel's index, and b gets the value of the target image. If the mask is a 1, then we must look at the source image's gradient in 4 directions.
+        <br><br>
+        Matrix A gets a 4 at that pixel index, and -1, -1, -1, -1 at the four neighbor pixel indices x-1,y; x+1,y; x,y-1; x,y+1. Matrix b gets 4*source(x, y) - source(x+1, y) - source(x-1, y) - source(x, y+1) - source(x, y-1), where x, y are indices.
+        <br><br>
+        Using the sparse matrix solver, this algorithm can successfully run under a minute even on large 2000 by 2000 pixel images.
+        </p>
+      <br>
+
+      <h4>Poisson Blending</h4>
+        <p>Below are the results that the algorithm produced! Included are source and target images, as well as the naive cut & paste result, and the result of the blending algorithm.
+        </p>
+      <br>
+
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="whaleS.jpg" alt="Card image cap">
+          <div class="card-body">
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="whaleT.jpg" alt="Card image cap">
+          <div class="card-body">
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="whale.jpg" alt="Card image cap">
+          <div class="card-body">
+          </div>
+        </div>
+      </div>
+
+      <div class="card-group">
+        <div class="card" style="width: 60rem;">
+          <img src="whale_out.jpg" width="500px" alt="Card image cap">
+        </div>
+        <div class="card text-center" style="width: 60rem;">
+          <img src="castle_out.jpg" width="500px" alt="Card image cap">
+        </div>
+      </div>
+
+      <br>
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="castleS.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="castleT.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="castle.jpg" alt="Card image cap">
+        </div>
+      </div>
+      <br>
+      <div class="card-group">
+        <div class="card">
+          <img class="card-img-top" src="astroS.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="astroT.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="astro.jpg" alt="Card image cap">
+        </div>
+        <div class="card">
+          <img class="card-img-top" src="astro_out.jpg" alt="Card image cap">
+        </div>
+      </div>
+      <br>
+        <p>
+        <br><br>Also shown is the same Harry, Voldemort image used for multiresolution blending. The Poisson blend changes Voldemort to warm colors, while the MR blend (shown earlier) lets Voldemort stay bluish.
+        <br><br> I think Poisson blending is useful when you want the colors of the target and source images to match in the blend, while multiresolution blending is more useful in cases when the transition of the seam matters.
+        </p>
+        <br>
+        <div class="card-group">
+          <div class="card">
+            <img class="card-img-top" src="harryS.jpg" alt="Card image cap">
+            <div class="card-body">
+            </div>
+          </div>
+          <div class="card">
+            <img class="card-img-top" src="harryT.jpg" alt="Card image cap">
+            <div class="card-body">
+            </div>
+          </div>
+          <div class="card">
+            <img class="card-img-top" src="harry.jpg" alt="Card image cap">
+            <div class="card-body">
+            </div>
+          </div>
+          <div class="card">
+            <img class="card-img-top" src="harry_out.jpg" alt="Card image cap">
+            <div class="card-body">
+            </div>
+          </div>
+          <br>
+            <p>The failure case is the image with Dobby the Elf in our CS 194 classroom--the algorithm changed Dobby's gradients too much to match the eclectic background of the chairs and doors. So he's a little seethrough, and doesn't appear to be solid.
+            </p>
+          <br>
+          <div class="card-group">
+            <div class="card">
+              <img class="card-img-top" src="dobbyS.jpg" alt="Card image cap">
+            </div>
+            <div class="card">
+              <img class="card-img-top" src="dobbyT.jpg" alt="Card image cap">
+            </div>
+            <div class="card">
+              <img class="card-img-top" src="dobby.jpg" alt="Card image cap">
+            </div>
+          </div>
+          <div class='card-group'>
+            <div class="card" style="width: 30rem;">
+              <img class="card-img-top" src="dobby_out.jpg" alt="Card image cap">
+            </div>
+          </div>
+        </div>
+
+      <!-- Small images  -->
+
+    <!-- /Gallery -->
+    <!-- Credits Section  -->
+    <br><br>
+      <p>HTML/CSS for this page was taken from
+        <a href="https://v4-alpha.getbootstrap.com/components/card/">https://v4-alpha.getbootstrap.com/components/card/</a><br></p>
+    </div>
+    <!-- /.container -->
+    <br>
+    <br>
+    <br>
+  </body>
+</html>
